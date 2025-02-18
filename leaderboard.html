@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BELLS Leaderboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link rel="icon" href="data:,">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html"><i class="fas fa-bell"></i> BELLS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="leaderboard.html">
+                            <i class="fas fa-trophy"></i> Leaderboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="playground.html">
+                            <i class="fas fa-gamepad"></i> Playground
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="recommendation.html">
+                            <i class="fas fa-robot"></i> Recommendation
+                        </a>
+                    </li>
+                    <li class="nav-item"></li>
+                        <a class="nav-link" href="metrics.html">
+                            <i class="fas fa-chart-bar"></i> Metrics Description
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="hero-section">
+        <div class="container text-center">
+            <h1 class="hero-title"><i class="fas fa-trophy"></i> BELLS Leaderboard</h1>
+            <p class="hero-subtitle">Safeguard Performance Rankings</p>
+            <p class="hero-description">
+                Compare and evaluate different LLM safeguards based on our comprehensive benchmarks.
+                See how they rank across multiple safety-critical dimensions.
+            </p>
+        </div>
+    </div>
+
+    <!-- Metrics Link Section -->
+    <div class="metrics-link-container">
+        <div class="metrics-link-card">
+            <i class="fas fa-chart-bar metrics-icon"></i>
+            <div class="metrics-text">
+                <h4>New to our metrics?</h4>
+                <p>Learn more about how we evaluate and score safeguards</p>
+            </div>
+            <a href="metrics.html" class="metrics-button">
+                View Metrics Description
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <section id="leaderboard" class="section">
+            <!-- Ranking Section -->
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                <i class="fas fa-trophy"></i>
+                                Overall Ranking
+                            </h3>
+                            <p class="plot-intro">
+                                A comprehensive comparison of safeguard performance across key metrics: Detection Rate for both adversarial and non-adversarial content, False Positive Rate, and the overall BELLS Score. The color-coding system helps quickly identify performance levels across different metrics.
+                            </p>
+                            <div id="rankingList"></div>
+                            <div class="interpretation-section">
+                                <button class="interpretation-toggle" onclick="toggleInterpretation('ranking-interpretation')">
+                                    <i class="fas fa-lightbulb"></i>View Interpretation
+                                </button>
+                                <div id="ranking-interpretation" class="interpretation-content">
+                                    <ul>
+                                        <li>LLM Guard leads overall with the highest BELLS Score, showing balanced performance across all metrics</li>
+                                        <li>Top performers maintain Detection Rates above 90% while keeping False Positives low</li>
+                                        <li>Notable trade-off between Detection Rate and False Positives among lower-ranked safeguards</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Heatmap Section -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                <i class="fas fa-th"></i>
+                                Performance by Category
+                            </h3>
+                            <p class="plot-intro">
+                                Detailed breakdown of safeguard effectiveness across different harm categories, based on <strong>non-adversarial harmful prompts only</strong>. The heatmap visualization highlights strengths and specializations of each solution, making it easy to identify which safeguards excel in specific areas of protection. Note that this evaluation focuses on straightforward harmful content without sophisticated evasion techniques.
+                            </p>
+                            <div class="custom-heatmap-container">
+                                <div id="customHeatmap"></div>
+                                <div class="heatmap-tooltip"></div>
+                                <div class="heatmap-legend"></div>
+                            </div>
+                            <div class="interpretation-section">
+                                <button class="interpretation-toggle" onclick="toggleInterpretation('heatmap-interpretation')">
+                                    <i class="fas fa-lightbulb"></i>View Interpretation
+                                </button>
+                                <div id="heatmap-interpretation" class="interpretation-content">
+                                    <ul>
+                                        <li>Strong performance across most safeguards in detecting explicit harm categories</li>
+                                        <li>More variation in effectiveness for nuanced categories like disinformation</li>
+                                        <li>Some safeguards show specialization in specific harm types</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jailbreak Analysis Section -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                <i class="fas fa-shield-alt"></i>
+                                Jailbreak Type Analysis
+                            </h3>
+                            <p class="plot-intro">
+                                This visualization breaks down each safeguard's effectiveness against different types of jailbreak attempts. 
+                            </p>
+                            <div id="jailbreakPlot"></div>
+                            <div class="interpretation-section">
+                                <button class="interpretation-toggle" onclick="toggleInterpretation('jailbreak-interpretation')">
+                                    <i class="fas fa-lightbulb"></i>View Interpretation
+                                </button>
+                                <div id="jailbreak-interpretation" class="interpretation-content">
+                                    <ul>
+                                        <li>Most safeguards show higher detection rates for sophisticated jailbreak attempts</li>
+                                        <li>Top performers maintain consistent detection rates across different jailbreak types</li>
+                                        <li>Some safeguards show specialized strength in detecting specific jailbreak patterns</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sensitivity Analysis Section -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                <i class="fas fa-microscope"></i>
+                                Sensitivity Analysis
+                            </h3>
+                            <p class="plot-intro">
+                                This analysis demonstrates how safeguards differentiate between content of varying severity levels, both in standard and adversarial scenarios. A robust safeguard should show increasing detection rates from benign to harmful content, indicating proper calibration to content severity.
+                            </p>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="plot-section">
+                                        <h4 class="plot-subtitle">
+                                            <i class="fas fa-chart-bar"></i>
+                                            Standard Content Sensitivity
+                                        </h4>
+                                        <p class="plot-description">
+                                            Shows how safeguards respond to non-adversarial content across three severity levels. Ideal performance shows low detection rates for benign content and progressively higher rates for borderline and harmful content, indicating proper calibration to content severity.
+                                        </p>
+                                        <div id="harmfulnessSensitivityPlot"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="plot-section">
+                                        <h4 class="plot-subtitle">
+                                            <i class="fas fa-shield-alt"></i>
+                                            Adversarial Content Sensitivity
+                                        </h4>
+                                        <p class="plot-description">
+                                            Demonstrates safeguard effectiveness against jailbreak attempts of varying severity. High detection rates across all categories indicate strong resistance to adversarial manipulation, while maintaining appropriate sensitivity to content severity.
+                                        </p>
+                                        <div id="adversarialSensitivityPlot"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="interpretation-section">
+                                <button class="interpretation-toggle" onclick="toggleInterpretation('sensitivity-interpretation')">
+                                    <i class="fas fa-lightbulb"></i>View Interpretation
+                                </button>
+                                <div id="sensitivity-interpretation" class="interpretation-content">
+                                    <ul>
+                                        <li>Ideal safeguards show increasing detection rates from benign to harmful content, demonstrating proper calibration to content severity</li>
+                                        <li>Higher sensitivity to adversarial content indicates better resistance to jailbreak attempts</li>
+                                        <li>The gap between standard and adversarial detection rates reveals robustness against evasion attempts</li>
+                                        <li>Consistent performance across both plots suggests reliable content moderation capabilities</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="https://www.securite-ia.fr/" target="_blank">
+                        <img src="images/logo_cesia_full.png" alt="CeSIA Logo" style="height: 50px; width: auto;">
+                    </a>
+                </div>
+                <div class="footer-text">
+                    <p>Created by Hadrien Mariaccia</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="leaderboard.js"></script>
+</body>
+</html> 

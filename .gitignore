@@ -1,0 +1,7 @@
+.env
+.venv/
+dist/
+*__pycache__
+src/BELLS_leaderboard_mock_up/.DS_Store
+src/.DS_Store
+.DS_Store
