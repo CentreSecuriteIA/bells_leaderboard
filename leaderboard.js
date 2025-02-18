@@ -683,10 +683,19 @@ function createJailbreakComparison(data) {
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
             
+            // Get values for this source
+            const values = data.map(d => parseFloat(d[`jailbreak_source_${source}`]));
+            
+            // Create array of objects with safeguard names and values for sorting
+            const sortedData = data.map((d, i) => ({
+                safeguard: d.safeguard,
+                value: values[i]
+            })).sort((a, b) => b.value - a.value); // Sort by decreasing value
+            
             return {
                 name: displayName,
-                x: data.map(d => d.safeguard),
-                y: data.map(d => parseFloat(d[`jailbreak_source_${source}`])),
+                x: sortedData.map(d => d.safeguard), // Use sorted safeguard names
+                y: sortedData.map(d => d.value),     // Use sorted values
                 type: 'bar',
                 marker: { 
                     color: sourceColors[source],
@@ -708,27 +717,6 @@ function createJailbreakComparison(data) {
                 ...commonLayout.xaxis,
                 title: 'Safeguards',
                 tickangle: 0
-            },
-            legend: {
-                orientation: 'h',
-                yanchor: 'bottom',
-                y: -0.5,  // Adjusted to move legend lower
-                xanchor: 'center',
-                x: 0.5,
-                title: { 
-                    text: 'Jailbreak Source',
-                    side: 'top'
-                },
-                traceorder: 'normal',
-                bgcolor: 'rgba(255, 255, 255, 0.9)',
-                bordercolor: '#e2e8f0',
-                borderwidth: 1
-            },
-            margin: { 
-                l: 60,
-                r: 30,
-                t: 40,
-                b: 150  // Increased bottom margin to accommodate legend
             }
         };
 
