@@ -346,7 +346,7 @@ body {
 
 .ranking-header {
     display: grid;
-    grid-template-columns: 80px 200px repeat(4, 1fr);
+    grid-template-columns: 60px 180px repeat(4, 1fr);
     align-items: center;
     padding: 1.5rem 1.2rem;
     font-weight: 600;
@@ -355,12 +355,11 @@ body {
     border-radius: 12px;
     margin-bottom: 1.5rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .ranking-item {
     display: grid;
-    grid-template-columns: 80px 200px repeat(4, 1fr);
+    grid-template-columns: 60px 180px repeat(4, 1fr);
     align-items: center;
     padding: 1.2rem;
     margin-bottom: 0.8rem;
@@ -538,11 +537,10 @@ body {
 }
 
 .safeguard-name {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: #2d3748;
     letter-spacing: 0.3px;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 #rankingList {
@@ -551,6 +549,23 @@ body {
     border-radius: 16px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+#rankingList .rank-column {
+    width: 60px;
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#rankingList .safeguard-column {
+    width: 150px; /* Adjust this value as needed */
+    font-size: 0.9em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 * {
@@ -565,18 +580,12 @@ body {
 
 @media (max-width: 1200px) {
     .ranking-header, .ranking-item {
-        grid-template-columns: 60px 180px repeat(4, 1fr);
-        font-size: 0.9rem;
-    }
-    
-    .score {
-        font-size: 1rem;
-        padding: 0.3rem 0.6rem;
-    }
-    
-    .tooltip-icon:hover::after {
+        grid-template-columns: 50px 150px repeat(4, 1fr);
         font-size: 0.85rem;
-        max-width: 250px;
+    }
+    
+    .safeguard-name {
+        font-size: 0.85rem;
     }
 }
 
@@ -1452,7 +1461,7 @@ body {
     text-align: center;
     border-radius: 4px;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: normal;
     height: 40px; /* Fixed height for cells */
     display: flex;
     align-items: center;
@@ -1460,14 +1469,13 @@ body {
 }
 
 .heatmap-row-label {
+    font-size: 0.9rem;
     font-weight: 600;
-    color: #1e293b;
-    font-size: 0.95rem;
+    color: #2d3748;
+    letter-spacing: 0.3px;
+    padding: 8px;
     text-align: left;
-    padding: 8px 12px;
-    height: 40px; /* Match cell height */
-    display: flex;
-    align-items: center;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .heatmap-col-label {
@@ -1699,13 +1707,14 @@ body {
 
 .ranking-item {
     display: grid;
-    grid-template-columns: 60px 200px repeat(4, 1fr);
+    grid-template-columns: 60px 180px repeat(4, 1fr);
     align-items: center;
     padding: 1.2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
     background: white;
     border-radius: 12px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
 }
 
 .legend-note {
@@ -2271,10 +2280,48 @@ body {
 }
 
 .safeguard-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2d3748;
+    letter-spacing: 0.3px;
+}
+
+.rank-number {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.medal-rank {
+    background: none;
     font-size: 1.5rem;
-    font-weight: bold;
-    margin: 1rem 0;
-    text-align: center;
+    width: 40px;
+    height: 40px;
+}
+
+.first-place {
+    background: linear-gradient(to right, rgba(255, 215, 0, 0.1), transparent);
+    border-left: 4px solid #FFD700;
+}
+
+.rank-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+}
+
+.ranking-item:hover .rank-number {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
 }
 
 /* Metrics Display */
@@ -2503,5 +2550,40 @@ body {
         transform: rotate(90deg);
         margin: 0.25rem 0;
     }
+}
+
+.heatmap-row-label.safeguard-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2d3748;
+    letter-spacing: 0.3px;
+    padding: 8px;
+    text-align: left;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.heatmap-cell {
+    font-weight: normal;
+    font-size: 0.9rem;
+}
+
+.heatmap-legend .legend-color.score-excellent {
+    background: rgba(37, 99, 235, 0.1);
+    border: 1px solid #1e40af;
+}
+
+.heatmap-legend .legend-color.score-good {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid #065f46;
+}
+
+.heatmap-legend .legend-color.score-fair {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid #92400e;
+}
+
+.heatmap-legend .legend-color.score-poor {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #991b1b;
 }
 

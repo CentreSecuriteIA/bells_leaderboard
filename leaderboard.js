@@ -178,12 +178,79 @@ function createHarmPreventionPlot(data) {
 
 function createRankingList(data) {
     const sortedData = [...data].sort((a, b) => parseFloat(b.BELLS_score) - parseFloat(a.BELLS_score));
-    
     const rankingContainer = document.getElementById('rankingList');
-    if (!rankingContainer) {
-        console.error('Ranking list container not found');
-        return;
-    }
+    
+    // Create header
+    const header = document.createElement('div');
+    header.className = 'ranking-header';
+    header.innerHTML = `
+        <div class="rank-column">
+            <div class="column-title">Rank</div>
+        </div>
+        <div class="metric-column">
+            <div class="column-title">
+                Safeguard
+            </div>
+        </div>
+        <div class="metric-column">
+            <div class="column-title">
+                Detection Rate
+                <div class="metric-subtext">
+                    Adversarial
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" 
+                    title="Detection rate for adversarial harmful content, measuring how often safeguards successfully identify sophisticated attacks"></i>
+                </div>
+            </div>
+        </div>
+        <div class="metric-column">
+            <div class="column-title">
+                Detection Rate
+                <div class="metric-subtext">
+                    Non-Adversarial
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" 
+                    title="Detection rate for direct harmful content, showing baseline effectiveness against straightforward harmful prompts"></i>
+                </div>
+            </div>
+        </div>
+        <div class="metric-column">
+            <div class="column-title">
+                False Positive Rate
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" 
+                title="False Positive Rate on non-harmful non-adversarial prompts, measuring over-triggering on safe content"></i>
+            </div>
+        </div>
+        <div class="metric-column">
+            <div class="column-title">
+                BELLS Score
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" 
+                title="Balanced Evaluation of Language Learning Safeguards - A comprehensive metric combining detection rates and false positive rates"></i>
+            </div>
+        </div>
+    `;
+    rankingContainer.appendChild(header);
+
+    // Add color legend
+    const legend = document.createElement('div');
+    legend.className = 'legend-scale mb-4';
+    legend.innerHTML = `
+        <div class="legend-item">
+            <div class="legend-color poor"></div>
+            <span>Poor (&lt; 0.5)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color fair"></div>
+            <span>Fair (0.5-0.7)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color good"></div>
+            <span>Good (0.7-0.9)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color excellent"></div>
+            <span>Excellent (&gt; 0.9)</span>
+        </div>
+    `;
+    rankingContainer.appendChild(legend);
 
     // Find best scores for each metric
     const bestScores = {
@@ -193,66 +260,6 @@ function createRankingList(data) {
         bells: Math.max(...data.map(item => parseFloat(item.BELLS_score)))
     };
 
-    // Add color scale legend
-    const legendDiv = document.createElement('div');
-    legendDiv.className = 'score-legend';
-    legendDiv.innerHTML = `
-        <div class="legend-title">
-            <i class="fas fa-palette"></i> Score Color Scale
-        </div>
-        <div class="legend-scale">
-            <div class="legend-item">
-                <div class="legend-color poor"></div>
-                <span>Poor (0.0 - 0.5)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color fair"></div>
-                <span>Fair (0.5 - 0.7)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color good"></div>
-                <span>Good (0.7 - 0.9)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color excellent"></div>
-                <span>Excellent (0.9 - 1.0)</span>
-            </div>
-        </div>
-        <div class="legend-note">
-            * For FPR, scale is inverted (lower is better)
-        </div>
-    `;
-    rankingContainer.appendChild(legendDiv);
-
-    // Create header row with tooltips
-    const headerRow = document.createElement('div');
-    headerRow.className = 'ranking-header';
-    headerRow.innerHTML = `
-        <div class="rank-column">Rank</div>
-        <div class="safeguard-column">Safeguard</div>
-        <div class="metric-column">
-            Detection Rate<br/><span class="metric-subtext">Adversarial</span>
-            <i class="fas fa-info-circle tooltip-icon" 
-               data-tooltip="Measures the safeguard's ability to detect harmful content that uses sophisticated evasion techniques. Higher rates indicate better protection against advanced attacks."></i>
-        </div>
-        <div class="metric-column">
-            Detection Rate<br/><span class="metric-subtext">Non-Adversarial</span>
-            <i class="fas fa-info-circle tooltip-icon" 
-               data-tooltip="Indicates how effectively the safeguard identifies straightforward harmful content without evasion attempts. Higher rates show better baseline protection."></i>
-        </div>
-        <div class="metric-column">
-            False Positive Rate
-            <i class="fas fa-info-circle tooltip-icon" 
-               data-tooltip="The rate at which the safeguard incorrectly flags safe content as harmful. Lower rates mean fewer false alarms and better user experience."></i>
-        </div>
-        <div class="metric-column">
-            BELLS Score
-            <i class="fas fa-info-circle tooltip-icon" 
-               data-tooltip="Our comprehensive metric that balances detection effectiveness with false positive control. Combines multiple factors into a single score - higher is better."></i>
-        </div>
-    `;
-    rankingContainer.appendChild(headerRow);
-
     // Create ranking items
     sortedData.forEach((item, index) => {
         const bells_score = parseFloat(item.BELLS_score).toFixed(3);
@@ -261,10 +268,18 @@ function createRankingList(data) {
         const fpr = parseFloat(item["benign_non-adversarial"]).toFixed(3);
         
         const rankingItem = document.createElement('div');
-        rankingItem.className = 'ranking-item';
+        rankingItem.className = `ranking-item ${index === 0 ? 'first-place' : ''}`;
+        
+        // Create rank number with medal for top 3
+        let rankDisplay = '';
+        if (index === 0) rankDisplay = '🥇';
+        else if (index === 1) rankDisplay = '🥈';
+        else if (index === 2) rankDisplay = '🥉';
+        else rankDisplay = `#${index + 1}`;
+
         rankingItem.innerHTML = `
             <div class="rank-column">
-                <div class="rank-badge">#${index + 1}</div>
+                <div class="rank-number ${index < 3 ? 'medal-rank' : ''}">${rankDisplay}</div>
             </div>
             <div class="safeguard-column">
                 <span class="safeguard-name">${item.safeguard}</span>
@@ -283,6 +298,12 @@ function createRankingList(data) {
             </div>
         `;
         rankingContainer.appendChild(rankingItem);
+    });
+
+    // Initialize tooltips after adding elements to the DOM
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 }
 
@@ -339,7 +360,7 @@ function createHeatmap(data) {
     data.forEach(item => {
         // Add row label
         const rowLabel = document.createElement('div');
-        rowLabel.className = 'heatmap-row-label';
+        rowLabel.className = 'heatmap-row-label safeguard-name';
         rowLabel.textContent = item.safeguard;
         grid.appendChild(rowLabel);
 
@@ -348,6 +369,7 @@ function createHeatmap(data) {
             const score = parseFloat(item[category]) || 0;
             const cell = document.createElement('div');
             cell.className = `heatmap-cell ${getScoreClass(score)}`;
+            cell.style.fontWeight = 'normal';
             cell.textContent = score.toFixed(3);
             
             // Add hover tooltip
