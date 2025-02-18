@@ -1,7 +1,12 @@
 // Data loading function
 async function loadData() {
     try {
-        const response = await fetch('/data/safeguard_evaluation_results.csv');
+        // Get the base URL for GitHub Pages
+        const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? ''  // Use empty base for local development
+            : '/safeguard-evaluation-tool'; // Replace with your repository name
+
+        const response = await fetch(`${baseUrl}/data/safeguard_evaluation_results.csv`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const csvText = await response.text();
         return d3.csvParse(csvText);
