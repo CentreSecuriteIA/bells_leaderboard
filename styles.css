@@ -2223,11 +2223,22 @@ body {
 }
 
 .recommendation-card {
-    position: relative;
-    background: white;
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    background: transparent; /* Ensure no background color */
+}
+
+.recommendation-card-content {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .recommendation-card:hover {
@@ -2585,5 +2596,235 @@ body {
 .heatmap-legend .legend-color.score-poor {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid #991b1b;
+}
+
+.github-card {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.github-card-content {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d333b 100%);
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.github-card-content:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.github-icon {
+    font-size: 2rem;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.github-text {
+    flex-grow: 1;
+}
+
+.github-text h4 {
+    color: #ffffff;
+    margin: 0 0 0.3rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.github-text p {
+    color: #8b949e;
+    margin: 0;
+    font-size: 0.95rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.github-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #238636;
+    color: white;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.github-button:hover {
+    background: #2ea043;
+    color: white;
+    text-decoration: none;
+}
+
+.github-button i {
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+}
+
+.github-button:hover i {
+    transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+    .github-card-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1.2rem;
+    }
+
+    .github-text {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Unified card styles (except GitHub) */
+.metrics-description-card,
+.leaderboard-card,
+.playground-card,
+.recommendation-card {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.metrics-description-card-content,
+.leaderboard-card-content,
+.playground-card-content,
+.recommendation-card-content {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metrics-description-icon,
+.leaderboard-icon,
+.playground-icon,
+.recommendation-icon {
+    font-size: 2rem;
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.metrics-description-text,
+.leaderboard-text,
+.playground-text,
+.recommendation-text {
+    flex-grow: 1;
+}
+
+.metrics-description-text h4,
+.leaderboard-text h4,
+.playground-text h4,
+.recommendation-text h4 {
+    color: #1f2937;
+    margin: 0 0 0.3rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.metrics-description-text p,
+.leaderboard-text p,
+.playground-text p,
+.recommendation-text p {
+    color: #6b7280;
+    margin: 0;
+    font-size: 0.95rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.metrics-description-button,
+.leaderboard-button,
+.playground-button,
+.recommendation-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #3b82f6;
+    color: white;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.metrics-description-button:hover,
+.leaderboard-button:hover,
+.playground-button:hover,
+.recommendation-button:hover {
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+}
+
+.metrics-description-button i,
+.leaderboard-button i,
+.playground-button i,
+.recommendation-button i {
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+}
+
+.metrics-description-button:hover i,
+.leaderboard-button:hover i,
+.playground-button:hover i,
+.recommendation-button:hover i {
+    transform: translateX(4px);
+}
+
+/* Shared hover effects */
+.metrics-description-card-content:hover,
+.leaderboard-card-content:hover,
+.playground-card-content:hover,
+.recommendation-card-content:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .metrics-description-card-content,
+    .leaderboard-card-content,
+    .playground-card-content,
+    .recommendation-card-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1.2rem;
+    }
+
+    .metrics-description-text,
+    .leaderboard-text,
+    .playground-text,
+    .recommendation-text {
+        margin-bottom: 0.5rem;
+    }
 }
 
