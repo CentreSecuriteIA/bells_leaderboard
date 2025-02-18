@@ -50,7 +50,7 @@ async function loadData() {
 
         return {
             datasets: datasets,
-            safeguards: ['lakera_guard', 'prompt_guard', 'langkit', 'nemo', 'llm_guard']
+            safeguards: ['lakera_guard', 'prompt_guard', 'langkit', 'nemo', 'llm_guard', 'gpt-4', 'claude-3-sonnet-20240229', 'gemini-pro', 'mistral-large-latest']
         };
     } catch (error) {
         console.error('Error in loadData:', error);
