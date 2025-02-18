@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BELLS Recommendation System</title>
+    <title>BELLS Safeguard Recommendation</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
@@ -33,7 +33,7 @@
                             <i class="fas fa-robot"></i> Recommendation
                         </a>
                     </li>
-                    <li class="nav-item"></li>
+                    <li class="nav-item">
                         <a class="nav-link" href="metrics.html">
                             <i class="fas fa-chart-bar"></i> Metrics Description
                         </a>
@@ -46,131 +46,209 @@
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="container text-center">
-            <h1 class="hero-title"><i class="fas fa-robot"></i> Recommendation System</h1>
-            <p class="hero-subtitle">Find Your Ideal Safeguard</p>
-            <p class="hero-description">
-                Get personalized safeguard recommendations based on your specific needs and requirements.
-                Our system analyzes your preferences to suggest the most suitable solutions.
-            </p>
+            <h1 class="hero-title"><i class="fas fa-robot"></i> Safeguard Recommendation System</h1>
+            <p class="hero-subtitle">Find the optimal safeguard based on empirical evaluation data</p>
+            
+            <div class="hero-steps">
+                <div class="hero-step">
+                    <span class="step-badge">1</span>
+                    <span class="step-text">Set Focus</span>
+                </div>
+                <div class="hero-step-arrow">→</div>
+                <div class="hero-step">
+                    <span class="step-badge">2</span>
+                    <span class="step-text">Select Categories</span>
+                </div>
+                <div class="hero-step-arrow">→</div>
+                <div class="hero-step">
+                    <span class="step-badge">3</span>
+                    <span class="step-text">Get Top Safeguards</span>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="dashboard-container">
         <section id="recommendation" class="section">
-
             <div class="recommendation-form">
-                <form id="recommendationForm">
-                    <div class="form-section">
-                        <h4>System Configuration</h4>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">System Access Type</label>
-                                <select class="form-select" name="systemType" required>
-                                    <option value="Black Box API">Black Box API</option>
-                                    <option value="Direct Access">Direct Access</option>
-                                </select>
-                                <div class="help-text">
-                                    Choose your system access type:
-                                    <ul>
-                                        <li>Black Box API: You only have API access (e.g., OpenAI API)</li>
-                                        <li>Direct Access: You have access to model weights or deployment infrastructure</li>
-                                    </ul>
+                <form id="recommendationForm" class="needs-validation" novalidate>
+                    <div class="row g-4">
+                        <!-- Primary Focus Card -->
+                        <div class="col-md-6">
+                            <div class="config-card">
+                                <div class="config-card-header">
+                                    <i class="fas fa-bullseye"></i>
+                                    <h4>Primary Focus</h4>
+                                </div>
+                                <div class="config-card-body">
+                                    <label class="form-label">What's your main concern?</label>
+                                    <select class="form-select form-select-lg" name="primaryFocus" required>
+                                        <option value="benign">Minimize False Positives</option>
+                                        <option value="harmful">Maximize Harmful Content Detection</option>
+                                        <option value="jailbreak">Maximize Jailbreak Resistance</option>
+                                        <option value="balanced">Balanced Approach</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Using RAG?</label>
-                                <select class="form-select" name="ragEnabled" required>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select>
-                                <div class="help-text">
-                                    Select whether your system will use Retrieval Augmented Generation (RAG) to enhance responses with external knowledge
+                        </div>
+
+                        <!-- Jailbreak Protection Card -->
+                        <div class="col-md-6">
+                            <div class="config-card">
+                                <div class="config-card-header">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <h4>Jailbreak Protection</h4>
+                                </div>
+                                <div class="config-card-body">
+                                    <label class="form-label">Priority attack type</label>
+                                    <select class="form-select form-select-lg" name="jailbreakPriority" required>
+                                        <option value="narrative">Narrative (Story-based)</option>
+                                        <option value="syntactic">Syntactic (Code/Symbol)</option>
+                                        <option value="generative">Generative (AI-generated)</option>
+                                        <option value="balanced">Balanced Protection</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance Requirements Card -->
+                        <div class="col-md-12">
+                            <div class="config-card">
+                                <div class="config-card-header">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <h4>Performance Requirements</h4>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Minimum BELLS Score</label>
+                                            <select class="form-select form-select-lg" name="minBellsScore" required>
+                                                <option value="0">No minimum</option>
+                                                <option value="0.3">Above 0.3</option>
+                                                <option value="0.5">Above 0.5</option>
+                                                <option value="0.7">Above 0.7</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Maximum False Positive Rate</label>
+                                            <select class="form-select form-select-lg" name="maxFalsePositive" required>
+                                                <option value="1">No maximum</option>
+                                                <option value="0.3">Below 30%</option>
+                                                <option value="0.2">Below 20%</option>
+                                                <option value="0.1">Below 10%</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Critical Categories Card -->
+                        <div class="col-md-12">
+                            <div class="config-card">
+                                <div class="config-card-header">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <h4>Critical Content Categories</h4>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="categories-grid">
+                                        <div class="category-toggle">
+                                            <input type="checkbox" class="btn-check" id="Physical_harm" name="categories" value="Physical_harm" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="Physical_harm">
+                                                <i class="fas fa-user-injured"></i>
+                                                Physical Harm
+                                            </label>
+                                        </div>
+                                        <div class="category-toggle">
+                                            <input type="checkbox" class="btn-check" id="Economic_harm" name="categories" value="Economic_harm" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="Economic_harm">
+                                                <i class="fas fa-dollar-sign"></i>
+                                                Economic Harm
+                                            </label>
+                                        </div>
+                                        <div class="category-toggle">
+                                            <input type="checkbox" class="btn-check" id="Privacy" name="categories" value="Privacy" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="Privacy">
+                                                <i class="fas fa-user-secret"></i>
+                                                Privacy
+                                            </label>
+                                        </div>
+                                        <div class="category-toggle">
+                                            <input type="checkbox" class="btn-check" id="Harassment_and_discrimination" name="categories" value="Harassment_and_discrimination" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="Harassment_and_discrimination">
+                                                <i class="fas fa-ban"></i>
+                                                Harassment/Discrimination
+                                            </label>
+                                        </div>
+                                        <div class="category-toggle">
+                                            <input type="checkbox" class="btn-check" id="Disinformation" name="categories" value="Disinformation" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="Disinformation">
+                                                <i class="fas fa-newspaper"></i>
+                                                Disinformation
+                                            </label>
+                                        </div>
+                                        <div class="category-toggle">
+                                            <input type="checkbox" class="btn-check" id="Expert_advice" name="categories" value="Expert_advice" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="Expert_advice">
+                                                <i class="fas fa-user-md"></i>
+                                                Expert Advice
+                                            </label>
+                                        </div>
+                                        <div class="category-toggle">
+                                            <input type="checkbox" class="btn-check" id="Sexual_Adult_content" name="categories" value="Sexual/Adult_content" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="Sexual_Adult_content">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                                Sexual/Adult Content
+                                            </label>
+                                        </div>
+                                        <div class="category-toggle">
+                                            <input type="checkbox" class="btn-check" id="Malware_Hacking" name="categories" value="Malware/Hacking" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="Malware_Hacking">
+                                                <i class="fas fa-bug"></i>
+                                                Malware/Hacking
+                                            </label>
+                                        </div>
+                                        <div class="category-toggle">
+                                            <input type="checkbox" class="btn-check" id="Fraud_Deception" name="categories" value="Fraud/Deception" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="Fraud_Deception">
+                                                <i class="fas fa-mask"></i>
+                                                Fraud/Deception
+                                            </label>
+                                        </div>
+                                        <div class="category-toggle">
+                                            <input type="checkbox" class="btn-check" id="Government_decision_making" name="categories" value="Government_decision_making" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="Government_decision_making">
+                                                <i class="fas fa-landmark"></i>
+                                                Government Decision Making
+                                            </label>
+                                        </div>
+                                        <div class="category-toggle">
+                                            <input type="checkbox" class="btn-check" id="CBRN" name="categories" value="CBRN" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="CBRN">
+                                                <i class="fas fa-biohazard"></i>
+                                                CBRN
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="form-section">
-                        <h4>Use Case Assessment</h4>
-                        <div class="mb-3">
-                            <label class="form-label">Interaction Types</label>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="interactionTypes" value="General chat">
-                                        <label class="form-check-label">General chat</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="interactionTypes" value="Content generation">
-                                        <label class="form-check-label">Content generation</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="interactionTypes" value="Code generation">
-                                        <label class="form-check-label">Code generation</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="interactionTypes" value="Data analysis">
-                                        <label class="form-check-label">Data analysis</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="interactionTypes" value="Expert advice">
-                                        <label class="form-check-label">Expert advice</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="interactionTypes" value="Customer service">
-                                        <label class="form-check-label">Customer service</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <h4>Security Preferences</h4>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Expected Request Volume</label>
-                                <select class="form-select" name="requestVolume" required>
-                                    <option value="Low">Low (&lt;1k/day)</option>
-                                    <option value="Medium">Medium (1k-10k/day)</option>
-                                    <option value="High">High (&gt;10k/day)</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Risk Level</label>
-                                <select class="form-select" name="riskLevel" required>
-                                    <option value="Very Low">Very Low (&lt;1%)</option>
-                                    <option value="Low">Low (1-5%)</option>
-                                    <option value="Medium">Medium (5-15%)</option>
-                                    <option value="High">High (&gt;15%)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-magic"></i> Get Personalized Recommendation
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-4">
+                        <i class="fas fa-magic"></i> Generate Evidence-Based Recommendations
                     </button>
                 </form>
 
                 <div id="recommendationResult" class="mt-4">
-                    <!-- Results will be populated dynamically -->
+                    <!-- Results will be populated by JavaScript -->
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="recommendation.js"></script>
-
-    <!-- Add before closing body tag -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -185,5 +263,10 @@
             </div>
         </div>
     </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="recommendation.js"></script>
 </body>
 </html> 
