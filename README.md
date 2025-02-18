@@ -12,7 +12,7 @@ BELLS is a comprehensive benchmark designed to evaluate the effectiveness of saf
 
 ## Getting Started
 
-Visit our live leaderboard at [URL] to:
+Visit our live leaderboard at [https://centresecuriteia.github.io/bells_leaderboard/](https://centresecuriteia.github.io/bells_leaderboard/) to:
 - View current rankings of LLM systems
 - Explore detailed safety metrics
 - Test your own LLM system
