@@ -18,7 +18,6 @@ jobs:
 
       - name: Build Project (if needed)
         run: |
-          cd src/BELLS_leaderboard_mock_up/html_version  # Change to your folder
           npm install  # Adjust if using another package manager
           npm run build  # Adjust build command
 
