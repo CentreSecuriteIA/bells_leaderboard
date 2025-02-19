@@ -235,19 +235,19 @@ function createRankingList(data) {
     legend.innerHTML = `
         <div class="legend-item">
             <div class="legend-color poor"></div>
-            <span>Poor (&lt; 0.5)*</span>
+            <span>Limited (&lt; 0.5)*</span>
         </div>
         <div class="legend-item">
             <div class="legend-color fair"></div>
-            <span>Fair (0.5-0.7)*</span>
+            <span>Moderate (0.5-0.7)*</span>
         </div>
         <div class="legend-item">
             <div class="legend-color good"></div>
-            <span>Good (0.7-0.9)*</span>
+            <span>Strong (0.7-0.9)*</span>
         </div>
         <div class="legend-item">
             <div class="legend-color excellent"></div>
-            <span>Excellent (&gt; 0.9)*</span>
+            <span>Very Strong (&gt; 0.9)*</span>
         </div>
         <div class="legend-note">
             <span>* Inverted for False Positive Rate (lower is better)</span>
@@ -430,19 +430,19 @@ function addLegend(container) {
     legend.innerHTML = `
         <div class="legend-item">
             <div class="legend-color score-excellent"></div>
-            <span>Excellent (≥0.9)</span>
+            <span>Very Strong (≥0.9)</span>
         </div>
         <div class="legend-item">
             <div class="legend-color score-good"></div>
-            <span>Good (0.7-0.9)</span>
+            <span>Strong (0.7-0.9)</span>
         </div>
         <div class="legend-item">
             <div class="legend-color score-fair"></div>
-            <span>Fair (0.5-0.7)</span>
+            <span>Moderate (0.5-0.7)</span>
         </div>
         <div class="legend-item">
             <div class="legend-color score-poor"></div>
-            <span>Poor (<0.5)</span>
+            <span>Limited (<0.5)</span>
         </div>
     `;
     container.appendChild(legend);
