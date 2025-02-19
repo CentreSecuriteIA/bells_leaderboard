@@ -235,19 +235,22 @@ function createRankingList(data) {
     legend.innerHTML = `
         <div class="legend-item">
             <div class="legend-color poor"></div>
-            <span>Poor (&lt; 0.5)</span>
+            <span>Poor (&lt; 0.5)*</span>
         </div>
         <div class="legend-item">
             <div class="legend-color fair"></div>
-            <span>Fair (0.5-0.7)</span>
+            <span>Fair (0.5-0.7)*</span>
         </div>
         <div class="legend-item">
             <div class="legend-color good"></div>
-            <span>Good (0.7-0.9)</span>
+            <span>Good (0.7-0.9)*</span>
         </div>
         <div class="legend-item">
             <div class="legend-color excellent"></div>
-            <span>Excellent (&gt; 0.9)</span>
+            <span>Excellent (&gt; 0.9)*</span>
+        </div>
+        <div class="legend-note">
+            <span>* Inverted for False Positive Rate (lower is better)</span>
         </div>
     `;
     rankingContainer.appendChild(legend);
@@ -548,6 +551,19 @@ function createFPRComparison(data) {
 }
 
 function createJailbreakComparison(data) {
+    // Add this at the beginning of the function
+    // Create container if it doesn't exist
+    let container = document.querySelector('.jailbreak-plot-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'jailbreak-plot-container';
+        const backButtonContainer = document.createElement('div');
+        backButtonContainer.className = 'back-button-container';
+        container.appendChild(backButtonContainer);
+        document.getElementById('jailbreakPlot').parentNode.insertBefore(container, document.getElementById('jailbreakPlot'));
+        container.appendChild(document.getElementById('jailbreakPlot'));
+    }
+
     // Initialize view state
     let currentView = 'type';
     let currentType = null;
@@ -590,6 +606,7 @@ function createJailbreakComparison(data) {
     };
 
     // Common layout settings
+    // In createJailbreakComparison function, update the commonLayout
     const commonLayout = {
         barmode: 'group',
         bargap: 0.15,
@@ -613,8 +630,11 @@ function createJailbreakComparison(data) {
             bordercolor: '#e2e8f0',
             borderwidth: 1
         },
-        margin: { l: 60, r: 20, t: 40, b: 80 },
+        // Update margins to give more space on the right
+        margin: { l: 60, r: 30, t: 40, b: 80 },
         height: 500,
+        width: null,  // Keep responsive
+        autosize: true,
         showlegend: true,
         hovermode: 'closest',
         hoverlabel: { 
@@ -628,15 +648,17 @@ function createJailbreakComparison(data) {
         plot_bgcolor: 'white',
         paper_bgcolor: 'white'
     };
+    
 
     function createTypeView() {
         currentView = 'type';
         currentType = null;
 
-        // Remove any existing back button and table
-        const existingButton = document.querySelector('.back-button');
-        if (existingButton) existingButton.remove();
-        
+        // Clear the back button container
+        const backButtonContainer = document.querySelector('.back-button-container');
+        backButtonContainer.innerHTML = ''; // Empty the container but keep it
+
+        // Clear any existing table
         const existingTable = document.querySelector('.syntactic-table');
         if (existingTable) existingTable.remove();
 
@@ -742,16 +764,15 @@ function createJailbreakComparison(data) {
             }
         };
 
-        if (!document.querySelector('.back-button')) {
-            const backButton = document.createElement('button');
-            backButton.textContent = '← Back to Types View';
-            backButton.className = 'back-button';
-            backButton.onclick = createTypeView;
-            document.getElementById('jailbreakPlot').parentNode.insertBefore(
-                backButton,
-                document.getElementById('jailbreakPlot')
-            );
-        }
+        // Replace empty container content with actual button
+        const backButton = document.createElement('button');
+        backButton.textContent = '← Back to Types View';
+        backButton.className = 'back-button';
+        backButton.onclick = createTypeView;
+
+        const container = document.querySelector('.back-button-container');
+        container.innerHTML = ''; // Clear the container
+        container.appendChild(backButton);
 
         Plotly.newPlot('jailbreakPlot', traces, layout, {
             responsive: true,
@@ -770,6 +791,16 @@ function createJailbreakComparison(data) {
         // Remove any existing table
         const existingTable = document.querySelector('.syntactic-table');
         if (existingTable) existingTable.remove();
+
+        // Create and add back button
+        const backButton = document.createElement('button');
+        backButton.textContent = '← Back to Types View';
+        backButton.className = 'back-button';
+        backButton.onclick = createTypeView;
+
+        const container = document.querySelector('.back-button-container');
+        container.innerHTML = ''; // Clear the container
+        container.appendChild(backButton);
 
         // Create table
         const table = document.createElement('table');
@@ -808,15 +839,6 @@ function createJailbreakComparison(data) {
             tbody.appendChild(row);
         });
         table.appendChild(tbody);
-
-        // Add back button
-        if (!document.querySelector('.back-button')) {
-            const backButton = document.createElement('button');
-            backButton.textContent = '← Back to Types View';
-            backButton.className = 'back-button';
-            backButton.onclick = createTypeView;
-            plotDiv.parentNode.insertBefore(backButton, plotDiv);
-        }
 
         // Add table to plot div
         plotDiv.parentNode.insertBefore(table, plotDiv.nextSibling);
