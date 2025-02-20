@@ -71,7 +71,7 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="image-section mb-5" style="margin-top: 5rem;">
-                        <img src="images/continuous_prompts_space.png" alt="Continuous Prompt Space" class="img-fluid matrix-image" style="width: 95%;">
+                        <img src="images/prompts_continuous_space.png" alt="Continuous Prompt Space" class="img-fluid matrix-image" style="width: 95%;">
                         <p class="image-caption">Continuous space of prompts across adversariality and harmfulness dimensions</p>
                     </div>
                 </div>
@@ -124,8 +124,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="evaluation-matrix text-center" style="margin-top: 5rem;">
-                            <img src="images/adv_harm_color_matrix.png" alt="Evaluation Matrix" class="img-fluid matrix-image">
-                            <p class="image-caption">Evaluation Matrix: Discretized representation of the prompt space</p>
+                            <img src="images/metrics_matrix_new.png" alt="Evaluation Matrix" class="img-fluid matrix-image">
+                            <p class="image-caption">Evaluation Matrix: Discretized representation of the prompt space and associated metrics</p>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -156,7 +156,7 @@
                                 </div>
                                 <div class="feature-content">
                                     <h4>Balanced Assessment</h4>
-                                    <p>Provides balanced assessment across different threat types</p>
+                                    <p>Provides balanced assessment across different threat types and safety requirements</p>
                                 </div>
                             </div>
                         </div>
@@ -169,16 +169,16 @@
         <div class="row g-4">
             <div class="col-md-6">
                 <div class="metrics-card metric-highlight tpr-adversarial">
-                    <h3><i class="fas fa-shield-alt"></i> Detection Rate Adversarial</h3>
+                    <h3><i class="fas fa-shield-alt"></i> Detection Rate Adversarial Harmful</h3>
                     <p>Detection rate for adversarial harmful content, measuring how often safeguards successfully identify sophisticated attacks.</p>
                     <div class="metric-note mt-2">
-                        <small>Higher detection rate indicates better protection against sophisticated attacks.</small>
+                        <small>Higher detection rate indicates better protection against sophisticated attacks like syntactic transformations, narrative templates, and generative methods.</small>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="metrics-card metric-highlight tpr-non-adversarial">
-                    <h3><i class="fas fa-check-circle"></i> Detection Rate Non-Adversarial</h3>
+                    <h3><i class="fas fa-check-circle"></i> Detection Rate Non-Adversarial Harmful</h3>
                     <p>Detection rate for direct harmful content, showing baseline effectiveness against straightforward harmful prompts.</p>
                     <div class="metric-note mt-2">
                         <small>Higher detection rate indicates better handling of direct harmful prompts.</small>
@@ -190,7 +190,7 @@
                     <h3><i class="fas fa-random"></i> Adversarial Sensitivity</h3>
                     <p>Measures how well the safeguard adapts to and detects various adversarial attack patterns.</p>
                     <div class="metric-note mt-2">
-                        <small>FPR on non-harmful adversarial prompts shows over-sensitivity to attack patterns.</small>
+                        <small>Shows safeguard sensitivity to attack patterns despite the harmlessness of the query</small>
                     </div>
                 </div>
             </div>
@@ -199,7 +199,7 @@
                     <h3><i class="fas fa-balance-scale"></i> Borderline Sensitivity</h3>
                     <p>Evaluates performance on edge cases and borderline content requiring nuanced analysis.</p>
                     <div class="metric-note mt-2">
-                        <small>FPR on borderline content indicates ability to handle nuanced cases.</small>
+                        <small>Shows safeguard sensitivity to borderline cases, this can be seen as a measure of the safeguard moral conservatism</small>
                     </div>
                 </div>
             </div>
@@ -222,7 +222,8 @@
             
             <p class="main-description">
                 A balanced metric combining detection rates while penalizing false positives. The BELLS score provides 
-                a comprehensive evaluation of safeguard effectiveness across different types of challenges.
+                a comprehensive evaluation of safeguard effectiveness across different types of challenges, including adversarial attacks, direct harmful content, and benign interactions. 
+                Higher BELLS scores indicate better overall performance in protecting against harmful content while maintaining usability for legitimate queries.
             </p>
 
             <div class="row">
