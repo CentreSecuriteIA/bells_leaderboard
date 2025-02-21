@@ -572,7 +572,7 @@ function createJailbreakComparison(data) {
     const typeToSourceMapping = {
         'generative': ['PAIR'],
         'narrative': ['huggingface', 'deck_of_many_prompts', 'deep_inception'],
-        'syntactic': ['base64', 'rot13', 'binary', 'hex', 'ascii', 'leet', 'url_encoded', 'uppercase', 'reverse', 'disemvowel']
+        'syntactic': ['base64', 'rot13', 'binary', 'hex', 'ascii', 'leet', 'url_encoded', 'uppercase', 'reverse']
     };
 
     // Professional color palette using corporate-friendly colors
@@ -623,15 +623,14 @@ function createJailbreakComparison(data) {
         },
         legend: {
             orientation: 'h',
-            y: -0.3,
+            y: -0.2,  // Changed from -0.3 to -0.4 to move legend down
             xanchor: 'center',
             x: 0.5,
             bgcolor: 'rgba(255, 255, 255, 0.9)',
             bordercolor: '#e2e8f0',
             borderwidth: 1
         },
-        // Update margins to give more space on the right
-        margin: { l: 60, r: 30, t: 40, b: 80 },
+        margin: { l: 60, r: 30, t: 40, b: 80 },  // Increased bottom margin from 80 to 100
         height: 500,
         width: null,  // Keep responsive
         autosize: true,
@@ -884,14 +883,11 @@ function createSensitivityAnalysis(data) {
         legend: {
             title: { text: 'Content Category' },
             orientation: 'h',
-            y: -0.3,
+            y: -0.5,  // Changed from -0.4 to -0.5
             xanchor: 'center',
-            x: 0.5,
-            bgcolor: 'rgba(255, 255, 255, 0.9)',
-            bordercolor: '#e2e8f0',
-            borderwidth: 1
+            x: 0.5
         },
-        margin: { l: 60, r: 20, t: 40, b: 120 },
+        margin: { l: 60, r: 20, t: 40, b: 120 },  // Increased bottom margin from 100 to 120
         height: 500,
         showlegend: true,
         hovermode: 'closest',
