@@ -95,11 +95,11 @@
                                 </button>
                                 <div id="ranking-interpretation" class="interpretation-content">
                                     <ul>
-                                        <li>Frontier models (GPT-4, Claude 3.5 Sonnet, Mistral Large, Gemini Pro) dominate the top positions with BELLS Scores above 0.84</li>
-                                        <li>GPT-4 leads with the best balance of metrics: strong detection rates (0.876 adversarial, 0.813 non-adversarial) and exceptionally low false positive rate (0.017)</li>
-                                        <li>NeMo shows remarkable performance, ranking 3rd with the highest detection rates (0.927 adversarial, 0.821 non-adversarial) despite not being a frontier model</li>
-                                        <li>Lakera shows competitive performance with a BELLS Score of 0.814, particularly strong in adversarial detection (0.855)</li>
-                                        <li>Notable pattern: Most models achieve better performance on adversarial detection compared to non-adversarial, with LLM Guard and Prompt Guard showing significant gaps between the two metrics</li>
+                                        <li>Frontier models (GPT-4, Claude 3.5 Sonnet, Mistral Large, Gemini Pro) dominate the top positions with BELLS Scores above 0.84, demonstrating superior performance in both detection and false positive control</li>
+                                        <li>GPT-4 leads with the highest BELLS Score (0.910), combining strong detection rates (82.5% adversarial, 84.8% non-adversarial) with an exceptionally low false positive rate (1.7%), despite facing architecture-specific "pair-based" attacks</li>
+                                        <li>Claude 3.5 Sonnet demonstrates impressive capabilities with the highest adversarial detection rate (88.5%) and a strong BELLS Score of 0.886</li>
+                                        <li>Among specialized safeguards, NeMo shows remarkable potential with strong detection rates for both adversarial and non-adversarial content, though its higher false positive rate (17.8%) impacts overall effectiveness</li>
+                                        <li>Pattern-based systems (LLM Guard, Prompt Guard, LangKit) show a notable performance gap with BELLS Scores below 0.801, excelling at known jailbreak patterns but struggling with nuanced or semantically complex harmful prompts lacking obvious keywords</li>
                                     </ul>
                                 </div>
                             </div>
@@ -131,11 +131,11 @@
                                 </button>
                                 <div id="heatmap-interpretation" class="interpretation-content">
                                     <ul>
-                                        <li>Frontier models (GPT-4, Claude 3.5 Sonnet, Mistral Large, Gemini Pro) show exceptional performance (≥0.9) across most harm categories, particularly in detecting harassment, malware/hacking, and physical harm</li>
-                                        <li>NeMo demonstrates strong capabilities comparable to frontier models, with notably high scores (>0.9) in most categories, especially harassment/discrimination, malware/hacking, and sexual/adult content</li>
-                                        <li>All models show weaker performance in detecting expert advice (scores mostly <0.3), suggesting this category is more challenging to evaluate since expert advice may be ambiguous or not clearly harmful in the legal sense</li>
-                                        <li>LLM Guard and Prompt Guard show very low detection rates (mostly <0.1) since they are specialized jailbreak detectors rather than general content moderators, while Lakera shows moderate performance (0.5-0.8) across most categories</li>
-                                        <li>CBRN (Chemical, Biological, Radiological, Nuclear) threats are perfectly detected (1.0) by frontier models and NeMo but pose significant challenges for LLM Guard and Prompt Guard (0.0)</li>
+                                        <li>Frontier models (GPT-4, Claude 3.5) and NeMo excel at detecting explicitly dangerous content, with detection rates above 90% for categories like CBRN threats, harassment, and physical harm. NeMo notably achieves perfect detection in both harassment and CBRN cases</li>
+                                        <li>All models, including frontier ones, show lower detection rates (20-30%) in less overtly dangerous categories like Expert Advice and Government Decision Making</li>
+                                        <li>Smaller systems like LLM Guard and Prompt Guard struggle severely across almost all categories, often failing to detect any violations (0% detection rate) due to their limited ability to parse deeper semantic meaning</li>
+                                        <li>Even frontier models show some vulnerabilities in nuanced areas like borderline disinformation tasks</li>
+                                        <li>CBRN threats and harassment represent the most consistently well-detected categories across top-performing models, while expert advice remains challenging for all systems</li>
                                     </ul>
                                 </div>
                             </div>
@@ -163,11 +163,11 @@
                                 </button>
                                 <div id="jailbreak-interpretation" class="interpretation-content">
                                     <ul>
-                                        <li>Narrative jailbreaks are most effectively detected across all safeguards, with detection rates consistently above 85% for most models</li>
-                                        <li>Frontier models (GPT-4, Claude 3.5 Sonnet, Gemini Pro, Mistral Large) and NeMo show strong performance (>70%) across all three jailbreak types</li>
-                                        <li>Syntactic jailbreaks pose the greatest challenge, with lower detection rates (20-65%) especially for Lakera, LangKit, and Prompt Guard</li>
-                                        <li>LangKit and Prompt Guard show very low performance on generative jailbreaks (~30%) while maintaining higher rates for narrative ones (~85%)</li>
-                                        <li>NeMo demonstrates exceptional performance with the highest detection rates across all categories, particularly in narrative (~95%) and generative (~90%) jailbreaks, suggesting that supervision systems of this caliber can be highly effective for detecting and preventing jailbreak attempts</li>
+                                        <li>Generative attacks prove most challenging across all systems: only Claude 3.5 achieves ~65% detection rate, while others including GPT-4 struggle to surpass 50%, suggesting current safety mechanisms have difficulty with complex logical structures</li>
+                                        <li>Narrative-based attacks show higher detection rates across most systems, likely due to exposure to common jailbreak templates during training and their presence in public datasets</li>
+                                        <li>For syntactic attacks, NeMo demonstrates exceptional strength with high detection rates across various transformation methods, while older safety systems often fall below 20% detection</li>
+                                        <li>In narrative jailbreaks, standard prompts from ChatGPT Jailbreak Prompts are well-detected across all systems, but sophisticated Deep Inception structures pose significant challenges (though LLM Guard shows exceptional performance specifically on these)</li>
+                                        <li>For syntactic transformations, NeMo excels across all types, while specialized safeguards show particular vulnerability to Unicode-based modifications. LLM Guard notably achieves perfect detection for URL-encoded text while struggling with other transformations</li>
                                     </ul>
                                 </div>
                             </div>
@@ -222,11 +222,11 @@
                                 </button>
                                 <div id="sensitivity-interpretation" class="interpretation-content">
                                     <ul>
-                                        <li>Standard Content: Frontier models and NeMo show clear escalation in detection rates (10-80%) from benign to harmful content, indicating good calibration to content severity</li>
-                                        <li>Adversarial Content: All safeguards demonstrate high detection rates (>60%) across categories, with NeMo showing the strongest performance (~90% across all categories)</li>
-                                        <li>Notable contrast: LLM Guard, LangKit and Prompt Guard show very low detection rates (<5%) for standard content across all categories while maintaining moderate to high detection rates for adversarial content, indicating they are ineffective at understanding core content harmfulness and instead focus mainly on detecting attack patterns</li>
-                                        <li>Lakera shows good differentiation in standard content (10% benign to 60% harmful) while maintaining consistent high performance (~80%) for adversarial content</li>
-                                        <li>Frontier models (GPT-4, Claude 3.5 Sonnet, Gemini Pro, Mistral Large) demonstrate superior understanding of core content harmfulness, with detection rates appropriately scaling from benign (~15%) to harmful (~80%) content. Their more balanced performance between standard and adversarial content (~70-90% for adversarial) suggests they rely less on pattern matching and more on semantic understanding</li>
+                                        <li>GPT-4 demonstrates sophisticated calibration, with detection rates increasing proportionally with content severity, showing strong discrimination between benign, borderline, and harmful content</li>
+                                        <li>NeMo and GPT-4 maintain low false positive rates on benign content while effectively escalating detection for borderline and harmful content</li>
+                                        <li>Other systems either misclassify borderline content as benign or show high false positive rates on benign prompts, indicating poor calibration</li>
+                                        <li>A critical vulnerability emerges under adversarial conditions: while systems maintain up to 95% accuracy gap between benign and harmful content with standard prompts, this drops dramatically to below 40% under sophisticated attacks</li>
+                                        <li>Specialized and older safeguards show minimal adaptation across severity levels, often failing to properly escalate detection rates for increasingly harmful content</li>
                                     </ul>
                                 </div>
                             </div>
