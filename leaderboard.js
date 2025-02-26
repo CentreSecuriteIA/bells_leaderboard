@@ -34,7 +34,6 @@ async function loadData() {
     console.log("Starting data loading...");
     const dataFiles = {
         safeguardData: 'data/safeguard_evaluation_results.csv',
-        confidenceData: 'data/safeguard_evaluation_results_confidence.csv'
     };
 
     try {
