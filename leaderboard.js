@@ -33,22 +33,34 @@ function toggleAnalysis(event) {
 async function loadData() {
     console.log("Starting data loading...");
     const dataFiles = {
-        safeguardData: 'data/safeguard_evaluation_results.csv'
+        safeguardData: 'data/safeguard_evaluation_results.csv',
+        confidenceData: 'data/safeguard_evaluation_results_confidence.csv'
     };
 
     try {
+        // Load both data files
         const response = await fetch(dataFiles.safeguardData);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const csvText = await response.text();
-        const data = d3.csvParse(csvText);
+        const confidenceResponse = await fetch(dataFiles.confidenceData);
         
-        // Validate FPR data
+        if (!response.ok || !confidenceResponse.ok) {
+            throw new Error(`HTTP error! status: ${!response.ok ? response.status : confidenceResponse.status}`);
+        }
+        
+        const csvText = await response.text();
+        const confidenceCsvText = await confidenceResponse.text();
+        
+        const data = d3.csvParse(csvText);
+        const confidenceData = d3.csvParse(confidenceCsvText);
+        
+        // Validate data
         console.log('CSV columns:', Object.keys(data[0]));
+        console.log('Confidence CSV columns:', Object.keys(confidenceData[0]));
         console.log('Sample row:', data[0]);
         
-        return data;
+        return {
+            standardData: data,
+            confidenceData: confidenceData
+        };
     } catch (error) {
         console.error("Error loading data:", error);
         throw error;
@@ -177,7 +189,9 @@ function createHarmPreventionPlot(data) {
 }
 
 function createRankingList(data) {
-    const sortedData = [...data].sort((a, b) => parseFloat(b.BELLS_score) - parseFloat(a.BELLS_score));
+    const standardData = data.standardData;
+    const sortedData = [...standardData].sort((a, b) => 
+        parseFloat(b.BELLS_score) - parseFloat(a.BELLS_score));
     const rankingContainer = document.getElementById('rankingList');
     
     // Create header
@@ -235,19 +249,19 @@ function createRankingList(data) {
     legend.innerHTML = `
         <div class="legend-item">
             <div class="legend-color poor"></div>
-            <span>Limited (&lt; 0.5)*</span>
+            <span>Limited (&lt; 50%)*</span>
         </div>
         <div class="legend-item">
             <div class="legend-color fair"></div>
-            <span>Moderate (0.5-0.7)*</span>
+            <span>Moderate (50-70%)*</span>
         </div>
         <div class="legend-item">
             <div class="legend-color good"></div>
-            <span>Strong (0.7-0.9)*</span>
+            <span>Strong (70-90%)*</span>
         </div>
         <div class="legend-item">
             <div class="legend-color excellent"></div>
-            <span>Very Strong (&gt; 0.9)*</span>
+            <span>Very Strong (&gt; 90%)*</span>
         </div>
         <div class="legend-note">
             <span>* Inverted for False Positive Rate (lower is better)</span>
@@ -257,18 +271,23 @@ function createRankingList(data) {
 
     // Find best scores for each metric
     const bestScores = {
-        detection_adv: Math.max(...data.map(item => parseFloat(item.harmful_jailbreaks))),
-        detection_non_adv: Math.max(...data.map(item => parseFloat(item["harmful_non-adversarial"]))),
-        fpr: Math.min(...data.map(item => parseFloat(item["benign_non-adversarial"]))), // Lower is better for FPR
-        bells: Math.max(...data.map(item => parseFloat(item.BELLS_score)))
+        detection_adv: Math.max(...standardData.map(item => parseFloat(item.harmful_jailbreaks))),
+        detection_non_adv: Math.max(...standardData.map(item => parseFloat(item["harmful_non-adversarial"]))),
+        fpr: Math.min(...standardData.map(item => parseFloat(item["benign_non-adversarial"]))), // Lower is better for FPR
+        bells: Math.max(...standardData.map(item => parseFloat(item.BELLS_score)))
     };
 
     // Create ranking items
     sortedData.forEach((item, index) => {
         const bells_score = parseFloat(item.BELLS_score).toFixed(3);
-        const detection_adv = parseFloat(item.harmful_jailbreaks).toFixed(3);
-        const detection_non_adv = parseFloat(item["harmful_non-adversarial"]).toFixed(3);
-        const fpr = parseFloat(item["benign_non-adversarial"]).toFixed(3);
+        const detection_adv = (parseFloat(item.harmful_jailbreaks) * 100).toFixed(1);
+        const detection_non_adv = (parseFloat(item["harmful_non-adversarial"]) * 100).toFixed(1);
+        const fpr = (parseFloat(item["benign_non-adversarial"]) * 100).toFixed(1);
+
+        // Get raw values for color class determination
+        const detection_adv_raw = parseFloat(item.harmful_jailbreaks);
+        const detection_non_adv_raw = parseFloat(item["harmful_non-adversarial"]);
+        const fpr_raw = parseFloat(item["benign_non-adversarial"]);
         
         const rankingItem = document.createElement('div');
         rankingItem.className = `ranking-item ${index === 0 ? 'first-place' : ''}`;
@@ -288,13 +307,13 @@ function createRankingList(data) {
                 <span class="safeguard-name">${item.safeguard}</span>
             </div>
             <div class="metric-column">
-                <div class="score ${getScoreClass(detection_adv)} ${Math.abs(detection_adv - bestScores.detection_adv) < 0.001 ? 'best-score' : ''}">${detection_adv}</div>
+                <div class="score ${getScoreClass(detection_adv_raw)} ${Math.abs(detection_adv_raw - bestScores.detection_adv) < 0.001 ? 'best-score' : ''}">${detection_adv}%</div>
             </div>
             <div class="metric-column">
-                <div class="score ${getScoreClass(detection_non_adv)} ${Math.abs(detection_non_adv - bestScores.detection_non_adv) < 0.001 ? 'best-score' : ''}">${detection_non_adv}</div>
+                <div class="score ${getScoreClass(detection_non_adv_raw)} ${Math.abs(detection_non_adv_raw - bestScores.detection_non_adv) < 0.001 ? 'best-score' : ''}">${detection_non_adv}%</div>
             </div>
             <div class="metric-column">
-                <div class="score ${getScoreClass(1 - fpr)} ${Math.abs(fpr - bestScores.fpr) < 0.001 ? 'best-score' : ''}">${fpr}</div>
+                <div class="score ${getScoreClass(1 - fpr_raw)} ${Math.abs(fpr_raw - bestScores.fpr) < 0.001 ? 'best-score' : ''}">${fpr}%</div>
             </div>
             <div class="metric-column">
                 <div class="score ${getScoreClass(bells_score)} ${Math.abs(bells_score - bestScores.bells) < 0.001 ? 'best-score' : ''}">${bells_score}</div>
@@ -311,9 +330,12 @@ function createRankingList(data) {
 }
 
 function getScoreClass(value) {
-    if (value >= 0.9) return 'score-excellent';
-    if (value >= 0.7) return 'score-good';
-    if (value >= 0.5) return 'score-fair';
+    // Ensure value is treated as a decimal between 0 and 1
+    const normalizedValue = value > 1 ? value / 100 : value;
+    
+    if (normalizedValue >= 0.9) return 'score-excellent';
+    if (normalizedValue >= 0.7) return 'score-good';
+    if (normalizedValue >= 0.5) return 'score-fair';
     return 'score-poor';
 }
 
@@ -373,7 +395,7 @@ function createHeatmap(data) {
             const cell = document.createElement('div');
             cell.className = `heatmap-cell ${getScoreClass(score)}`;
             cell.style.fontWeight = 'normal';
-            cell.textContent = score.toFixed(3);
+            cell.textContent = (score * 100).toFixed(1) + '%';
             
             // Add hover tooltip
             cell.addEventListener('mouseover', (e) => {
@@ -402,7 +424,7 @@ function showTooltip(event, safeguard, category, score) {
         <div class="tooltip-content">
             <strong>${safeguard}</strong><br>
             Category: ${category.replace(/_/g, ' ')}<br>
-            Score: ${score.toFixed(3)}
+            Score: ${(score * 100).toFixed(1)}%
         </div>
     `;
     
@@ -430,19 +452,19 @@ function addLegend(container) {
     legend.innerHTML = `
         <div class="legend-item">
             <div class="legend-color score-excellent"></div>
-            <span>Very Strong (≥0.9)</span>
+            <span>Very Strong (≥90%)</span>
         </div>
         <div class="legend-item">
             <div class="legend-color score-good"></div>
-            <span>Strong (0.7-0.9)</span>
+            <span>Strong (70-90%)</span>
         </div>
         <div class="legend-item">
             <div class="legend-color score-fair"></div>
-            <span>Moderate (0.5-0.7)</span>
+            <span>Moderate (50-70%)</span>
         </div>
         <div class="legend-item">
             <div class="legend-color score-poor"></div>
-            <span>Limited (<0.5)</span>
+            <span>Limited (<50%)</span>
         </div>
     `;
     container.appendChild(legend);
@@ -694,7 +716,7 @@ function createJailbreakComparison(data) {
             title: 'Click on a jailbreak type in the legend to see source breakdown',
             xaxis: {
                 ...commonLayout.xaxis,
-                title: 'Safeguards'
+                title: 'Supervision Systems'
             }
         };
 
@@ -758,7 +780,7 @@ function createJailbreakComparison(data) {
             title: `${type.charAt(0).toUpperCase() + type.slice(1)} Jailbreak Sources`,
             xaxis: {
                 ...commonLayout.xaxis,
-                title: 'Safeguards',
+                title: 'Supervision Systems',
                 tickangle: 0
             }
         };
@@ -819,7 +841,7 @@ function createJailbreakComparison(data) {
         const thead = document.createElement('thead');
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = `
-            <th>Safeguard</th>
+            <th>Supervision System</th>
             ${sourceHeaders.map(header => `<th>${header}</th>`).join('')}
         `;
         thead.appendChild(headerRow);
@@ -869,7 +891,7 @@ function createSensitivityAnalysis(data) {
         bargap: 0.15,
         bargroupgap: 0.1,
         xaxis: {
-            title: 'Safeguards',
+            title: 'Supervision Systems',
             tickfont: { size: 12 },
             tickangle: -45
         },
@@ -985,14 +1007,14 @@ document.addEventListener('DOMContentLoaded', function() {
         button.innerHTML = '<i class="fas fa-lightbulb"></i>View Interpretation';
     });
     
-    // Rest of your existing initialization code...
+    // Update how data is passed to functions
     loadData().then(data => {
         if (data) {
-            createRankingList(data);
-            createHeatmap(data);
-            createFPRComparison(data);
-            createJailbreakComparison(data);
-            createSensitivityAnalysis(data);
+            createRankingList(data); // This will use the standardData
+            createHeatmap(data.standardData);
+            createFPRComparison(data.standardData);
+            createJailbreakComparison(data.standardData);
+            createSensitivityAnalysis(data.standardData);
         }
     }).catch(error => {
         console.error('Error loading data:', error);

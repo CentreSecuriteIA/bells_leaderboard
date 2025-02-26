@@ -950,6 +950,7 @@ body {
 .tpr-non-adversarial { border-color: #ff8787; }
 .adversarial-sensitivity { border-color: #9775fa; }
 .borderline-sensitivity { border-color: #ffa94d; }
+.adversarial-borderline { border-color: #f47e00; }
 .fpr { border-color: #69db7c; }
 
 .metric-highlight p {
@@ -2035,20 +2036,20 @@ body {
 }
 
 .dimensions-explanation {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* display: grid; 
+       grid-template-columns: 1fr 1fr; */
     gap: 3rem;
     margin-top: 1.5rem;
-}
+  }
 
-.dimension-card {
+  .dimension-card {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     padding: 2rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     max-width: 100%;
-}
+  }
 
 .dimension-card h4 {
     color: #1e40af;
@@ -2936,3 +2937,20 @@ body {
     margin-top: 1rem;
 }
 
+/* Metrics section title styling */
+.metrics-section-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #224460;
+    margin-top: 2.5rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.metrics-section-subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+}
