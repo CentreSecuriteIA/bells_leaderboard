@@ -39,26 +39,17 @@ async function loadData() {
     try {
         // Load both data files
         const response = await fetch(dataFiles.safeguardData);
-        const confidenceResponse = await fetch(dataFiles.confidenceData);
-        
-        if (!response.ok || !confidenceResponse.ok) {
-            throw new Error(`HTTP error! status: ${!response.ok ? response.status : confidenceResponse.status}`);
-        }
         
         const csvText = await response.text();
-        const confidenceCsvText = await confidenceResponse.text();
         
         const data = d3.csvParse(csvText);
-        const confidenceData = d3.csvParse(confidenceCsvText);
         
         // Validate data
         console.log('CSV columns:', Object.keys(data[0]));
-        console.log('Confidence CSV columns:', Object.keys(confidenceData[0]));
         console.log('Sample row:', data[0]);
         
         return {
             standardData: data,
-            confidenceData: confidenceData
         };
     } catch (error) {
         console.error("Error loading data:", error);
