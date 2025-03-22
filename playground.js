@@ -50,7 +50,7 @@ async function loadData() {
 
         return {
             datasets: datasets,
-            safeguards: ['lakera_guard', 'prompt_guard', 'langkit', 'nemo', 'llm_guard', 'gpt-4', 'claude-3-5-sonnet-20241022', 'gemini-pro', 'mistral-large-latest']
+            safeguards: ['lakera_guard', 'prompt_guard', 'langkit', 'nemo', 'llm_guard', 'gpt-4', 'claude-3-5-sonnet-20241022', 'gemini-1.5-pro-latest', 'mistral-large-latest', 'deepseek-ai/DeepSeek-V3', 'grok-2-latest']
         };
     } catch (error) {
         console.error('Error in loadData:', error);
