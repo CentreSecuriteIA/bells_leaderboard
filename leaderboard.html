@@ -226,8 +226,42 @@
                                         <li>The degradation under adversarial conditions is particularly concerning - detection rate differential between benign and harmful content collapses dramatically across all systems</li>
                                         <li>For example, Lakera's differential drops from 55% (standard) to just 12% (adversarial), while NeMo's drops from 68% to only 7%. Even top performers struggle - GPT-4's differential decreases from 83% to 54%</li>
                                         <li>Most concerning is the high false positive rate on benign content under adversarial conditions, with systems like LLM Guard detecting 80% of benign prompts as harmful</li>
+                                    </ul>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <!-- Metacognitive Coherence Analysis Section -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">
+                                    <i class="fas fa-brain"></i>
+                                    Metacognitive Coherence Analysis
+                                </h3>
+                                <p class="plot-intro">
+                                    Analysis of model coherence between classification decisions and response behaviors. Shows rates of two types of incoherence:
+                                    (1) Classifying content as harmful but still providing answers
+                                    (2) Classifying content as benign but refusing/hedging responses
+                                </p>
+                                <div id="coherencePlot"></div>
+                                <div class="interpretation-section">
+                                    <button class="interpretation-toggle" onclick="toggleInterpretation('coherence-interpretation')">
+                                        <i class="fas fa-lightbulb"></i>View Interpretation
+                                    </button>
+                                    <div id="coherence-interpretation" class="interpretation-content">
+                                        <ul>
+                                            <li>Models show varying levels of metacognitive coherence between their classification decisions and response behaviors</li>
+                                            <li>Higher rates of "harmful but answers" incoherence suggest potential safety risks where models recognize harm but fail to properly restrict responses</li>
+                                            <li>The "benign but refuses" pattern indicates overcautious behavior that may impact model utility on safe inputs</li>
+                                            <li>More coherent models demonstrate better alignment between threat detection and response policies</li>
+                                        </ul>
+                                    </div>
+                                </div>
                         </div>
                     </div>
                 </div>

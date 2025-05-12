@@ -34,22 +34,21 @@ async function loadData() {
     console.log("Starting data loading...");
     const dataFiles = {
         safeguardData: 'data/safeguard_evaluation_results.csv',
+        coherenceData: 'data/metacognitive_results.csv'
     };
 
     try {
-        // Load both data files
-        const response = await fetch(dataFiles.safeguardData);
+        const [safeguardResponse, coherenceResponse] = await Promise.all([
+            fetch(dataFiles.safeguardData),
+            fetch(dataFiles.coherenceData)
+        ]);
         
-        const csvText = await response.text();
-        
-        const data = d3.csvParse(csvText);
-        
-        // Validate data
-        console.log('CSV columns:', Object.keys(data[0]));
-        console.log('Sample row:', data[0]);
+        const safeguardData = d3.csvParse(await safeguardResponse.text());
+        const coherenceData = d3.csvParse(await coherenceResponse.text());
         
         return {
-            standardData: data,
+            standardData: safeguardData,
+            coherenceData: coherenceData
         };
     } catch (error) {
         console.error("Error loading data:", error);
@@ -988,6 +987,151 @@ function createSensitivityAnalysis(data) {
     );
 }
 
+function createCoherenceAnalysis(data) {
+    // First check if the plot div exists
+    const plotDiv = document.getElementById('coherencePlot');
+    if (!plotDiv) {
+        console.error("Coherence plot div not found!");
+        return;
+    }
+
+    console.log("Starting createCoherenceAnalysis with data:", data);
+
+    // Process the data similar to the Python code
+    const modelGroups = {};
+    
+    data.forEach(row => {
+        // Default to coherent
+        let incoherenceType = 'coherent';
+        
+        // Classify harmful but answers
+        if (row.harmfulness === 'harmful' && row.response_type === 'answers') {
+            incoherenceType = 'harmful_but_answers';
+        }
+        
+        // Classify benign but refuses/hedges
+        if (row.harmfulness === 'not_harmful' && 
+            (row.response_type === 'refuses' || row.response_type === 'hedges')) {
+            incoherenceType = 'benign_but_refuses';
+        }
+
+        if (!modelGroups[row.model]) {
+            modelGroups[row.model] = {
+                total: 0,
+                coherent: 0,
+                harmful_but_answers: 0,
+                benign_but_refuses: 0
+            };
+        }
+        
+        modelGroups[row.model].total++;
+        modelGroups[row.model][incoherenceType]++;
+    });
+
+    // Calculate percentages
+    const processedData = {};
+    Object.entries(modelGroups).forEach(([model, counts]) => {
+        processedData[model] = {
+            harmful_but_answers: counts.harmful_but_answers / counts.total,
+            benign_but_refuses: counts.benign_but_refuses / counts.total,
+            coherent: counts.coherent / counts.total
+        };
+    });
+
+    // Sort models by coherence rate (descending)
+    const sortedModels = Object.keys(processedData).sort((a, b) => 
+        processedData[b].coherent - processedData[a].coherent
+    );
+
+    // Create traces for each incoherence type
+    const traces = [
+        {
+            name: 'Classifies as Harmful but Answers',
+            x: sortedModels,
+            y: sortedModels.map(model => processedData[model].harmful_but_answers),
+            type: 'bar',
+            marker: {
+                color: '#ff7f0e',
+                line: {
+                    color: '#ff7f0e',
+                    width: 1
+                }
+            },
+            text: sortedModels.map(model => 
+                (processedData[model].harmful_but_answers * 100).toFixed(2)
+            ),
+            textposition: 'auto',
+            hovertemplate: '%{x}<br>%{y:.1%}<extra></extra>'
+        },
+        {
+            name: 'Classifies as Benign but Refuses',
+            x: sortedModels,
+            y: sortedModels.map(model => processedData[model].benign_but_refuses),
+            type: 'bar',
+            marker: {
+                color: '#1f77b4',
+                line: {
+                    color: '#1f77b4',
+                    width: 1
+                }
+            },
+            text: sortedModels.map(model => 
+                (processedData[model].benign_but_refuses * 100).toFixed(2)
+            ),
+            textposition: 'auto',
+            hovertemplate: '%{x}<br>%{y:.1%}<extra></extra>'
+        }
+    ];
+
+    const layout = {
+        barmode: 'group',
+        title: 'Types of Incoherence by Model',
+        xaxis: {
+            title: 'Model',
+            tickangle: -45
+        },
+        yaxis: {
+            title: 'Proportion of Responses',
+            tickformat: ',.0%',
+            range: [0, 1],
+            gridcolor: '#e2e8f0',
+            gridwidth: 1,
+            ticktext: ['0%', '20%', '40%', '60%', '80%', '100%'],
+            tickvals: [0, 0.2, 0.4, 0.6, 0.8, 1]
+        },
+        legend: {
+            orientation: 'h',
+            y: -0.2,
+            xanchor: 'center',
+            x: 0.5
+        },
+        margin: {
+            l: 60,
+            r: 30,
+            t: 40,
+            b: 120
+        },
+        height: 500,
+        showlegend: true,
+        hovermode: 'closest',
+        hoverlabel: {
+            bgcolor: '#1e293b',
+            bordercolor: '#475569',
+            font: {
+                size: 13,
+                color: 'white'
+            }
+        },
+        plot_bgcolor: 'white',
+        paper_bgcolor: 'white'
+    };
+
+    Plotly.newPlot('coherencePlot', traces, layout, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
 // Initialize interpretation sections on page load
 document.addEventListener('DOMContentLoaded', function() {
     const interpretationContents = document.querySelectorAll('.interpretation-content');
@@ -1005,6 +1149,7 @@ document.addEventListener('DOMContentLoaded', function() {
             createFPRComparison(data.standardData);
             createJailbreakComparison(data.standardData);
             createSensitivityAnalysis(data.standardData);
+            createCoherenceAnalysis(data.coherenceData);
         }
     }).catch(error => {
         console.error('Error loading data:', error);
