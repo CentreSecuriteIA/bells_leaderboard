@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - BELLS Benchmark</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html"><i class="fas fa-bell"></i> BELLS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="leaderboard.html">
+                            <i class="fas fa-trophy"></i> Leaderboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="playground.html">
+                            <i class="fas fa-gamepad"></i> Playground
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="metrics.html">
+                            <i class="fas fa-chart-bar"></i> Metrics Description
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="faq.html">
+                            <i class="fas fa-question-circle"></i> FAQ
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container text-center">
+            <h1 class="hero-title"><i class="fas fa-question-circle"></i> Frequently Asked Questions</h1>
+            <p class="hero-subtitle"></p>
+            <p class="hero-description">
+                Find answers to common questions about our methodology, evaluation process, and key findings.
+            </p>
+        </div>
+    </div>
+
+    <!-- FAQ Content -->
+    <div class="dashboard-container">
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4><i class="fas fa-calculator"></i> How is the BELLS Score computed?</h4>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The BELLS score combines three key dimensions:</p>
+                    <ol>
+                        <li>Detection rate on adversarial harmful prompts (25% weight)</li>
+                        <li>Detection rate on direct harmful prompts (25% weight)</li>
+                        <li>False positive rate on benign prompts (50% weight)</li>
+                    </ol>
+                    <p>This weighting ensures a balanced evaluation between robust detection and precision (i.e., minimizing false positives). We don't include the benign adversarial prompts, nor the borderline prompts in the computation of the score. The reason is adversariality adds ambiguity to the content even for benign requests, and that borderline requests are by definition not undoubtedly harmful. This way, the BELLS score is as denoised as possible from ambiguity.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4><i class="fas fa-shield-alt"></i> Why did you evaluate supervisors specialized on jailbreaks / prompt injections detection like LLM Guard or Prompt Guard on content moderation tasks?</h4>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Our evaluation reflects a realistic deployment setting, where a misuse filter must handle a wide range of threats without relying on very narrow use cases. We encourage future systems to clarify their scope and evaluate themselves accordingly within general-purpose frameworks like BELLS.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4><i class="fas fa-robot"></i> Why didn't you evaluate the LLaMA model family?</h4>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We tried but all the llama models we tested were not answering the repurposed prompt question ("is this prompt harmful or not?") more than 50% of the time, the results were therefore not exploitable.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4><i class="fas fa-brain"></i> Why did you evaluate GPT-4, Claude 3.5, Grok 2, Gemini 1.5 and DeepSeek V3 and not other / newer models?</h4>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We conducted evaluations in January–February 2025 with limited resources and access. Our goal was not to exhaustively benchmark every model, but to show that even a simple, prompt-based repurposing of recent frontier LLMs consistently outperforms dedicated supervision systems. This suggests a general capability gap between old and new models in misuse detection, what we call the bitter lesson.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4><i class="fas fa-eye"></i> Why is LLaMA Guard only evaluated on content moderation?</h4>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We have evaluated Llama Guard 4 12B - the SOTA content moderation model from Meta to test whether our conclusions hold even for SOTA moderation tools. In fact, LLaMA Guard underperforms general models significantly on various harmful categories, showing its irrelevance regarding its high number of parameters.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4><i class="fas fa-cog"></i> Why is Claude 3.7 evaluated in the metacognitive incoherence section?</h4>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Claude 3.7 was released just before we ran the metacognitive incoherence evaluations. The point of the evaluation was to show the general trend of metacognitive incoherence among a representative set of models, therefore the newer the better. Also the metacognitive incoherence evaluations are independent from the supervision systems evaluations.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4><i class="fas fa-balance-scale"></i> Supervisors from the market are likely trained to be low sensitive because false positive might be more expensive than false negative</h4>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes and that's part of the problem. Some companies may prioritize low sensitivity (to avoid rejecting benign content), which can lead to unacceptably high false negatives. In safety-critical contexts, missing harmful content is much riskier than flagging an occasional benign input. False negatives at scale can be dangerous.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4><i class="fas fa-tachometer-alt"></i> Your solution is nice but it doubles the inference compute costs and increase the latency</h4>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>To some extent, but it's a tradeoff worth considering. Modern frontier LLMs like Gemini are relatively cheap; Regarding latency, inference costs can be further optimized with low-latency infrastructure like Groq. And for critical applications, performance and robustness should be more important optimization targets than cost and latency.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4><i class="fas fa-database"></i> Where can we access your dataset?</h4>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>For security reasons and to maintain benchmark integrity, we do not publicly release the full dataset to prevent potential misuse of harmful prompts and avoid gaming of the benchmark. Instead, we provide representative examples in our data playground and raw data at our leaderboard GitHub repository.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4><i class="fas fa-chart-line"></i> Why don't you have a graph showing the number of parameters and the scaling law?</h4>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>It would be great to have it but we don't know the number of parameters of the majority of the market deployed supervision systems. Regarding general LLMs, our results can also be the reflection of internal safety policy rather than a real capability of the model to detect misuse.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4><i class="fas fa-gavel"></i> How do you compare with constitutional classifiers?</h4>
+                    <i class="fas fa-chevron-down faq-toggle"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Anthropic's constitutional classifiers are a promising and relatively recent approach that was released during the course of our evaluations (January 2025). However, we were unable to test these systems within BELLS, as they are not publicly accessible. While their architecture aligns with many of our findings, emphasizing general model capability, scalability, and modularity, we strongly advocate for third-party access and reproducible evaluation protocols to validate claims of robustness across a wider range of threat models.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="https://www.securite-ia.fr/" target="_blank">
+                        <img src="images/logo_cesia_full.png" alt="CeSIA Logo" style="height: 50px; width: auto;">
+                    </a>
+                </div>
+                <div class="footer-text">
+                    <p>Created by Hadrien Mariaccia</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const toggle = element.querySelector('.faq-toggle');
+            
+            if (answer.style.display === 'none' || answer.style.display === '') {
+                answer.style.display = 'block';
+                toggle.style.transform = 'rotate(180deg)';
+                element.classList.add('active');
+            } else {
+                answer.style.display = 'none';
+                toggle.style.transform = 'rotate(0deg)';
+                element.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html> 

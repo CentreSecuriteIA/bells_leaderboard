@@ -35,33 +35,39 @@ async function loadData() {
     const dataFiles = {
         safeguardData: 'data/safeguard_evaluation_results.csv',
         confidenceData: 'data/safeguard_evaluation_results_confidence.csv',
-        coherenceData: 'data/metacognitive_results.csv'
+        coherenceData: 'data/metacognitive_results.csv',
+        llamaGuardData: 'data/safeguard_evaluation_results_llama.csv'
     };
 
     try {
-        const [safeguardResponse, confidenceResponse, coherenceResponse] = await Promise.all([
+        const [safeguardResponse, confidenceResponse, coherenceResponse, llamaGuardResponse] = await Promise.all([
             fetch(dataFiles.safeguardData),
             fetch(dataFiles.confidenceData),
-            fetch(dataFiles.coherenceData)
+            fetch(dataFiles.coherenceData),
+            fetch(dataFiles.llamaGuardData)
         ]);
         
-        if (!safeguardResponse.ok || !confidenceResponse.ok || !coherenceResponse.ok) {
+        if (!safeguardResponse.ok || !confidenceResponse.ok || !coherenceResponse.ok || !llamaGuardResponse.ok) {
             throw new Error('One or more HTTP requests failed');
         }
         
         const safeguardData = d3.csvParse(await safeguardResponse.text());
         const confidenceData = d3.csvParse(await confidenceResponse.text());
         const coherenceData = d3.csvParse(await coherenceResponse.text());
+        const llamaGuardData = d3.csvParse(await llamaGuardResponse.text());
         
         // Validate data
         console.log('CSV columns:', Object.keys(safeguardData[0]));
         console.log('Confidence CSV columns:', Object.keys(confidenceData[0]));
         console.log('Sample row:', safeguardData[0]);
+        console.log('Llama Guard Data:', llamaGuardData[0]);
+
         
         return {
             standardData: safeguardData,
             confidenceData: confidenceData,
-            coherenceData: coherenceData
+            coherenceData: coherenceData,
+            llamaGuardData: llamaGuardData
         };
     } catch (error) {
         console.error("Error loading data:", error);
@@ -663,7 +669,7 @@ function createJailbreakComparison(data) {
         },
         legend: {
             orientation: 'h',
-            y: -0.2,  // Changed from -0.3 to -0.4 to move legend down
+            y: -0.28,  // Moved further down to avoid overlap with x labels
             xanchor: 'center',
             x: 0.5,
             bgcolor: 'rgba(255, 255, 255, 0.9)',
@@ -1201,7 +1207,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadData().then(data => {
         if (data) {
             createRankingList(data);
-            createHeatmap(data.standardData);
+            createHeatmap(data.llamaGuardData);
             createFPRComparison(data.standardData);
             createJailbreakComparison(data.standardData);
             createSensitivityAnalysis(data.standardData);
