@@ -144,6 +144,119 @@ body {
     display: none;
 }
 
+/* FAQ Styles - matching index page card style */
+.faq-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faq-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.faq-question {
+    background: #ffffff;
+    color: #1f2937;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.faq-question:hover {
+    background: #f8f9fa;
+}
+
+.faq-question.active {
+    background: #f8f9fa;
+    border-bottom-color: #3b82f6;
+}
+
+.faq-question h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    flex: 1;
+}
+
+.faq-question h4 i {
+    margin-right: 0.75rem;
+    font-size: 1.2rem;
+    color: #3b82f6;
+}
+
+.faq-toggle {
+    font-size: 1rem;
+    color: #6b7280;
+    transition: transform 0.2s ease;
+    margin-left: 1rem;
+}
+
+.faq-answer {
+    padding: 1.5rem;
+    background: white;
+    color: #6b7280;
+    line-height: 1.6;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: none;
+}
+
+.faq-answer p {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.faq-answer p:last-child {
+    margin-bottom: 0;
+}
+
+.faq-answer ol {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.faq-answer li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .faq-question h4 {
+        font-size: 1rem;
+    }
+    
+    .faq-question,
+    .faq-answer {
+        padding: 1.25rem;
+    }
+    
+    .faq-question h4 i {
+        font-size: 1.1rem;
+        margin-right: 0.5rem;
+    }
+    
+    .faq-toggle {
+        font-size: 0.9rem;
+    }
+}
+
 .stats-row {
     margin-bottom: 2rem;
 }
@@ -2953,4 +3066,99 @@ body {
     color: #6b7280;
     font-style: italic;
     margin-bottom: 1.5rem;
+}
+
+/* FAQ Card Styles (for home page) - matching other cards */
+.faq-card {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.faq-card-content {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faq-icon {
+    font-size: 2rem;
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.faq-text {
+    flex-grow: 1;
+}
+
+.faq-text h4 {
+    color: #1f2937;
+    margin: 0 0 0.3rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.faq-text p {
+    color: #6b7280;
+    margin: 0;
+    font-size: 0.95rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.faq-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #3b82f6;
+    color: white;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.faq-button:hover {
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+}
+
+.faq-button i {
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+}
+
+.faq-button:hover i {
+    transform: translateX(4px);
+}
+
+.faq-card-content:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 768px) {
+    .faq-card-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1.2rem;
+    }
+
+    .faq-text {
+        margin-bottom: 0.5rem;
+    }
 }
